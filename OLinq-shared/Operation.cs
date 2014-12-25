@@ -20,8 +20,8 @@ namespace OLinq
             Contract.Requires<ArgumentNullException>(typeArgs >= 0);
             Contract.Requires<ArgumentNullException>(parameters >= 0);
 
-            return typeof(Queryable).GetMember(name).Concat(typeof(Enumerable).GetMember(name))
-                .OfType<MethodInfo>()
+            return new[] { typeof(Queryable), typeof(Enumerable) }
+                .Select(i => i.GetTypeInfo().GetDeclaredMethod(name))
                 .Where(i => i.IsGenericMethodDefinition)
                 .Where(i => i.GetGenericArguments().Length == typeArgs)
                 .Where(i => i.GetParameters().Length == parameters)

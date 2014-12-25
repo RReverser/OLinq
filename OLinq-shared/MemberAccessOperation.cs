@@ -93,7 +93,7 @@ namespace OLinq
             // if target is null, but it should be a value type, generate default instance of value type
             if (target == null &&
                 targetOp != null &&
-                self.Expression.Type.IsValueType)
+                self.Expression.Type.GetTypeInfo().IsValueType)
                 target = Activator.CreateInstance(self.Expression.Type);
 
             var member = self.Member;
@@ -102,7 +102,7 @@ namespace OLinq
             else if (self.Member is FieldInfo)
                 SetValue(GetValue((FieldInfo)member, target));
             else
-                throw new NotSupportedException(string.Format("MemberAccess does not support Member of type {0}.", member.MemberType));
+                throw new NotSupportedException(string.Format("MemberAccess does not support Member of type {0}.", member.GetType()));
         }
 
         T GetValue(FieldInfo member, object target)
@@ -126,7 +126,7 @@ namespace OLinq
             if (member is FieldInfo)
                 return ((FieldInfo)member).IsStatic;
             else if (member is PropertyInfo)
-                return (((PropertyInfo)member)).GetGetMethod().IsStatic;
+                return (((PropertyInfo)member)).GetMethod.IsStatic;
             else
                 throw new ArgumentException("Member is not of a known type.");
         }

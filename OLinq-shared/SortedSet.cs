@@ -32,7 +32,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Security.Permissions;
 using System.Diagnostics;
 
 // SortedSet is basically implemented as a reduction of SortedDictionary<K, V>

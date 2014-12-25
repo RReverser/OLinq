@@ -12,8 +12,8 @@ namespace OLinq
     {
 
         static MethodInfo WithNullSafeMethodInfo = typeof(ObservableQueryable)
-            .GetMethods()
-            .Single(i => i.Name == "WithNullSafe");
+            .GetTypeInfo()
+            .GetDeclaredMethod("WithNullSafe");
 
         /// <summary>
         /// Creates an observable query based on the given enumerable, or if the enumerable is already an observable

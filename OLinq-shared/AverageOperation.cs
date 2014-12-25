@@ -21,7 +21,7 @@ namespace OLinq
             if (expression.Method.GetGenericArguments().Length == 0 &&
                 expression.Method.GetParameters().Length == 1)
             {
-                var sourceType = expression.Method.GetParameters()[0].ParameterType.GetGenericArguments()[0];
+                var sourceType = expression.Method.GetParameters()[0].ParameterType.GenericTypeArguments[0];
                 var resultType = expression.Method.ReturnType;
                 return (IOperation)Activator.CreateInstance(typeof(AverageOperation<,>).MakeGenericType(sourceType, resultType), context, expression);
             }

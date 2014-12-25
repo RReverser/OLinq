@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace OLinq
 {
@@ -17,15 +18,18 @@ namespace OLinq
         /// <returns></returns>
         static Type Fix(Type type)
         {
-            var oldArgs = type.GetGenericArguments();
+            var oldArgs = type.GenericTypeArguments;
             var newArgs = new Type[oldArgs.Length];
             for (int i = 0; i < oldArgs.Length; i++)
                 newArgs[i] = Fix(oldArgs[i]);
 
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IQueryable<>))
-                return typeof(IEnumerable<>).MakeGenericType(newArgs);
-            if (type.IsGenericType)
-                return type.GetGenericTypeDefinition().MakeGenericType(newArgs);
+            if (type.GetTypeInfo().IsGenericType)
+            {
+                if (type.GetGenericTypeDefinition() == typeof(IQueryable<>))
+                    return typeof(IEnumerable<>).MakeGenericType(newArgs);
+                else
+                    return type.GetGenericTypeDefinition().MakeGenericType(newArgs);
+            }
             else
                 return type;
         }

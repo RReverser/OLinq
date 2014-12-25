@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace OLinq
 {
@@ -54,7 +55,7 @@ namespace OLinq
                 if (value != null)
                 {
                     // extract item type, generate new query type
-                    var itemType = value.GetType().GetGenericArguments()[0];
+                    var itemType = value.GetType().GenericTypeArguments[0];
                     var type = typeof(EnumerableQuery<>).MakeGenericType(itemType);
 
                     // generate new enumerable query wrapper for existing value
@@ -145,10 +146,10 @@ namespace OLinq
             if (expression == null)
                 throw new ArgumentNullException("expression");
 
-            if (typeof(IOrderedQueryable<TElement>).IsAssignableFrom(expression.Type))
+            if (typeof(IOrderedQueryable<TElement>).GetTypeInfo().IsAssignableFrom(expression.Type.GetTypeInfo()))
                 return new OrderedObservableQuery<TElement>(expression);
 
-            if (typeof(IQueryable<TElement>).IsAssignableFrom(expression.Type))
+            if (typeof(IQueryable<TElement>).GetTypeInfo().IsAssignableFrom(expression.Type.GetTypeInfo()))
                 return new ObservableQuery<TElement>(expression);
 
             throw new ArgumentException("Expression does not return IQueryable.");

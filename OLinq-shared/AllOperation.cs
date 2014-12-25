@@ -10,15 +10,15 @@ namespace OLinq
     static class AllOperation
     {
 
-        static readonly MethodInfo QueryableAllMethod = typeof(Queryable).GetMethods()
-            .Where(i => i.Name == "All")
+        static readonly MethodInfo QueryableAllMethod = typeof(Queryable).GetTypeInfo()
+            .GetDeclaredMethods("All")
             .Where(i => i.IsGenericMethodDefinition)
             .Where(i => i.GetGenericArguments().Length == 1)
             .Where(i => i.GetParameters().Length == 2)
             .Single();
 
-        static readonly MethodInfo EnumerableAllMethod = typeof(Enumerable).GetMethods()
-            .Where(i => i.Name == "All")
+        static readonly MethodInfo EnumerableAllMethod = typeof(Enumerable).GetTypeInfo()
+            .GetDeclaredMethods("All")
             .Where(i => i.IsGenericMethodDefinition)
             .Where(i => i.GetGenericArguments().Length == 1)
             .Where(i => i.GetParameters().Length == 2)
