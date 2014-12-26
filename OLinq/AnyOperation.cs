@@ -10,14 +10,14 @@ namespace OLinq
     static class AnyOperation
     {
 
-        static readonly MethodInfo QueryableAnyMethod = typeof(Enumerable).GetTypeInfo()
+        static readonly MethodInfo QueryableAnyMethod = typeof(Queryable).GetTypeInfo()
             .GetDeclaredMethods("Any")
             .Where(i => i.IsGenericMethodDefinition)
             .Where(i => i.GetGenericArguments().Length == 1)
             .Where(i => i.GetParameters().Length == 1)
             .Single();
 
-        static readonly MethodInfo QueryableAnyMethodWithPredicate = typeof(Enumerable).GetTypeInfo()
+        static readonly MethodInfo QueryableAnyMethodWithPredicate = typeof(Queryable).GetTypeInfo()
             .GetDeclaredMethods("Any")
             .Where(i => i.IsGenericMethodDefinition)
             .Where(i => i.GetGenericArguments().Length == 1)
@@ -33,7 +33,6 @@ namespace OLinq
 
         static readonly MethodInfo EnumerableAnyMethodWithPredicate = typeof(Enumerable).GetTypeInfo()
             .GetDeclaredMethods("Any")
-            .Where(i => i.Name == "Any")
             .Where(i => i.IsGenericMethodDefinition)
             .Where(i => i.GetGenericArguments().Length == 1)
             .Where(i => i.GetParameters().Length == 2)

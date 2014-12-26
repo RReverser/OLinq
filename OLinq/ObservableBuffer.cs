@@ -19,7 +19,9 @@ namespace OLinq
         /// <param name="view"></param>
         internal ObservableBuffer(ObservableView<TElement> view)
         {
+
             this.view = view;
+            Reset();
 
             // subscribe to notifications
             view.CollectionChanged += view_CollectionChanged;
@@ -40,9 +42,7 @@ namespace OLinq
                 case NotifyCollectionChangedAction.Replace:
                 case NotifyCollectionChangedAction.Reset:
                     {
-                        Items.Clear();
-                        foreach (var element in view)
-                            Items.Add(element);
+                        Reset();
                         OnCollectionChanged(args);
                         break;
                     }
@@ -82,6 +82,17 @@ namespace OLinq
                     }
             }
         }
+
+        /// <summary>
+        /// Invoked to reset the collection.
+        /// </summary>
+        void Reset()
+        {
+            Items.Clear();
+            foreach (var element in view)
+                Items.Add(element);
+        }
+
 
         /// <summary>
         /// Gets the associated view.
