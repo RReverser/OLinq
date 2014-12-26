@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -38,8 +37,6 @@ namespace OLinq
         /// <returns></returns>
         public static ObservableQuery<T> WithNullSafe<T>(this ObservableQuery<T> self, bool enable)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-
             return (ObservableQuery<T>)self.Provider.CreateQuery<T>(
                 Expression.Call(
                     WithNullSafeMethodInfo.MakeGenericMethod(typeof(T)),

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace OLinq
 {
@@ -67,8 +66,7 @@ namespace OLinq
         /// <returns></returns>
         public IOperation<T> GetVariable<T>(string name)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(name));
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException();
 
             IOperation node;
             if (!variables.TryGetValue(name, out node))

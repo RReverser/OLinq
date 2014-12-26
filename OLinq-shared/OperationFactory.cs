@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -113,8 +112,8 @@ namespace OLinq
         /// <returns></returns>
         static IOperation FromConstantExpression(OperationContext context, ConstantExpression expression)
         {
-            Contract.Requires<ArgumentNullException>(context != null);
-            Contract.Requires<ArgumentNullException>(expression != null);
+            if (context == null)
+                throw new ArgumentNullException();
 
             var query = expression.Value as ObservableQuery;
             if (query != null)
@@ -131,8 +130,8 @@ namespace OLinq
         /// <returns></returns>
         static IOperation FromCallExpression(OperationContext context, MethodCallExpression expression)
         {
-            Contract.Requires<ArgumentNullException>(context != null);
-            Contract.Requires<ArgumentNullException>(expression != null);
+            if (context == null)
+                throw new ArgumentNullException();
 
             if (expression.Method.DeclaringType == typeof(Queryable) ||
                 expression.Method.DeclaringType == typeof(Enumerable))
@@ -151,8 +150,8 @@ namespace OLinq
         /// <returns></returns>
         static IOperation FromQueryableExpression(OperationContext context, MethodCallExpression expression)
         {
-            Contract.Requires<ArgumentNullException>(context != null);
-            Contract.Requires<ArgumentNullException>(expression != null);
+            if (context == null)
+                throw new ArgumentNullException();
 
             Type resultItemType, sourceItemType, keyItemType;
 
@@ -231,8 +230,8 @@ namespace OLinq
         /// <returns></returns>
         static IOperation FromObservableQueryableExpression(OperationContext context, MethodCallExpression expression)
         {
-            Contract.Requires<ArgumentNullException>(context != null);
-            Contract.Requires<ArgumentNullException>(expression != null);
+            if (context == null)
+                throw new ArgumentNullException();
 
             switch (expression.Method.Name)
             {

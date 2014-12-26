@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -15,10 +14,10 @@ namespace OLinq
 
         public static bool IsMethod(MethodInfo method, string name, int typeArgs, int parameters)
         {
-            Contract.Requires<ArgumentNullException>(method != null);
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(typeArgs >= 0);
-            Contract.Requires<ArgumentNullException>(parameters >= 0);
+            if (method == null || name == null)
+                throw new ArgumentNullException();
+            if (typeArgs < 0 || parameters < 0)
+                throw new ArgumentOutOfRangeException();
 
             return new[] { typeof(Queryable), typeof(Enumerable) }
                 .Select(i => i.GetTypeInfo().GetDeclaredMethod(name))
@@ -40,10 +39,8 @@ namespace OLinq
         /// <returns></returns>
         public static IOperation CreateMethodCallOperation(Type type, OperationContext context, MethodCallExpression expression, params int[] genericArgIndexes)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(context != null);
-            Contract.Requires<ArgumentNullException>(expression != null);
-            Contract.Requires<ArgumentNullException>(genericArgIndexes != null);
+            if (context == null)
+                throw new ArgumentNullException();
 
             return (IOperation)Activator.CreateInstance(type.MakeGenericType(genericArgIndexes.Select(i => expression.Method.GetGenericArguments()[i]).ToArray()), context, expression);
         }

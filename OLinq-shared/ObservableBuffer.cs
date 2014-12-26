@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 
 namespace OLinq
 {
 
-    public sealed class ObservableBuffer<TElement> : IEnumerable<TElement>, INotifyCollectionChanged
+    public sealed class ObservableBuffer<TElement> : ObservableCollection<TElement>
     {
 
         ObservableView<TElement> view;
-        ObservableCollection<TElement> buffer = new ObservableCollection<TElement>();
 
         /// <summary>
         /// Initializes a new instance.
@@ -21,12 +21,8 @@ namespace OLinq
         {
             this.view = view;
 
-            // subscribe to notifications from both sides
+            // subscribe to notifications
             view.CollectionChanged += view_CollectionChanged;
-            buffer.CollectionChanged += buffer_CollectionChanged;
-
-            // reset buffer items
-            Reset();
         }
 
         /// <summary>
@@ -43,80 +39,47 @@ namespace OLinq
 #endif
                 case NotifyCollectionChangedAction.Replace:
                 case NotifyCollectionChangedAction.Reset:
-                    Reset();
-                    break;
+                    {
+                        Items.Clear();
+                        foreach (var element in view)
+                            Items.Add(element);
+                        OnCollectionChanged(args);
+                        break;
+                    }
                 case NotifyCollectionChangedAction.Add:
-                    // add new items
-                    if (args.NewStartingIndex == -1)
                     {
-                        foreach (TElement item in args.NewItems)
-                            buffer.Add(item);
-                    }
-                    else
-                    {
-                        for (int index = args.NewItems.Count - 1; index >= 0; index--)
+                        // add new items
+                        if (args.NewStartingIndex == -1)
                         {
-                            var item = (TElement) args.NewItems[index];
-                            buffer.Insert(index + args.NewStartingIndex, item);
+                            args = new NotifyCollectionChangedEventArgs(args.Action, args.NewItems, Items.Count);
+                            foreach (TElement item in args.NewItems)
+                                Items.Add(item);
                         }
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    // remove old items
-                    if (args.OldStartingIndex == -1)
-                    {
-                        foreach (TElement item in args.OldItems)
-                            buffer.Remove(item);
-                    }
-                    else
-                    {
-                        for (int index = 0; index < args.OldItems.Count; index++)
+                        else
                         {
-                            buffer.RemoveAt(args.OldStartingIndex);
+                            int index = args.NewStartingIndex;
+                            foreach (TElement item in args.NewItems)
+                                Items.Insert(index++, item);
                         }
+                        OnCollectionChanged(args);
+                        break;
                     }
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Invoked when the buffer collection changes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        void buffer_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
-        {
-            switch (args.Action)
-            {
-#if !SILVERLIGHT
-                case NotifyCollectionChangedAction.Move:
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, args.NewItems, args.NewStartingIndex, args.OldStartingIndex));
-                    break;
-#endif
-                case NotifyCollectionChangedAction.Replace:
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, args.NewItems, args.OldItems, args.NewStartingIndex));
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                    break;
-                case NotifyCollectionChangedAction.Add:
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, args.NewItems, args.NewStartingIndex));
-                    break;
                 case NotifyCollectionChangedAction.Remove:
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, args.OldItems, args.OldStartingIndex));
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Resets the buffered collection based on the underlying list.
-        /// </summary>
-        void Reset()
-        {
-            buffer.Clear();
-            foreach (var element in view)
-            {
-                buffer.Add(element);
+                    {
+                        // remove old items
+                        if (args.OldStartingIndex == -1)
+                        {
+                            foreach (TElement item in args.OldItems)
+                                Remove(item);
+                        }
+                        else
+                        {
+                            for (int index = 0; index < args.OldItems.Count; index++)
+                                Items.RemoveAt(args.OldStartingIndex);
+                            OnCollectionChanged(args);
+                        }
+                        break;
+                    }
             }
         }
 
@@ -127,25 +90,6 @@ namespace OLinq
         {
             get { return view; }
         }
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-        void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
-        {
-            if (CollectionChanged != null)
-                CollectionChanged(this, args);
-        }
-
-        public IEnumerator<TElement> GetEnumerator()
-        {
-            return buffer.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
     }
 
 }
