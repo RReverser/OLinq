@@ -14,10 +14,17 @@ namespace OLinq
         /// Default value type comparer.
         /// </summary>
         Comparer<TResult> comparer = Comparer<TResult>.Default;
+        bool isDescending;
+
+        public LambdaResultComparer(bool isDescending)
+        {
+            this.isDescending = isDescending;
+        }
 
         public int Compare(LambdaOperation<TResult> x, LambdaOperation<TResult> y)
         {
-            return comparer.Compare(x.Value, y.Value);
+            var result = comparer.Compare(x.Value, y.Value);
+            return isDescending ? -result : result;
         }
 
     }

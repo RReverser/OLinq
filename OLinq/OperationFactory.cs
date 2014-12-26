@@ -154,6 +154,7 @@ namespace OLinq
                 throw new ArgumentNullException();
 
             Type resultItemType, sourceItemType, keyItemType;
+            bool orderByDescending = false;
 
             switch (expression.Method.Name)
             {
@@ -210,7 +211,14 @@ namespace OLinq
                 case "Max":
                     return MaxOperation.CreateOperation(context, expression);
                 case "OrderBy":
-                    return OrderByOperation.CreateOperation(context, expression);
+                case "ThenBy":
+                    sourceItemType = expression.Method.GetGenericArguments()[0];
+                    keyItemType = expression.Method.GetGenericArguments()[1];
+                    return (IOperation)Activator.CreateInstance(typeof(OrderByOperation<,>).MakeGenericType(sourceItemType, keyItemType), context, expression, orderByDescending);
+                case "OrderByDescending":
+                case "ThenByDescending":
+                    orderByDescending = true;
+                    goto case "OrderBy";
                 case "FirstOrDefault":
                     sourceItemType = expression.Method.GetGenericArguments()[0];
                     return (IOperation)Activator.CreateInstance(typeof(FirstOrDefaultOperation<>).MakeGenericType(sourceItemType), context, expression);

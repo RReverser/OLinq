@@ -8,35 +8,28 @@ using System.Linq.Expressions;
 namespace OLinq
 {
 
-    static class OrderByOperation
-    {
-
-        public static IOperation CreateOperation(OperationContext context, MethodCallExpression expression)
-        {
-            return Operation.CreateMethodCallOperation(typeof(OrderByOperation<,>), context, expression, 0, 1);
-        }
-
-    }
-
     class OrderByOperation<TSource, TKey> : EnumerableSourceWithLambdaOperation<TSource, TKey, IEnumerable<TSource>>, IOrderedEnumerable<TSource>, INotifyCollectionChanged, IEnumerable<TSource>
     {
 
-        SortedSet<LambdaOperation<TKey>> sort = new SortedSet<LambdaOperation<TKey>>(new LambdaResultComparer<TKey>());
+        SortedSet<LambdaOperation<TKey>> sort;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="context"></param>
         /// <param name="expression"></param>
-        public OrderByOperation(OperationContext context, MethodCallExpression expression)
+        public OrderByOperation(OperationContext context, MethodCallExpression expression, bool isDescending)
             : base(context, expression, expression.Arguments[0], expression.Arguments[1].UnpackLambda<TSource, TKey>())
         {
+            sort = new SortedSet<LambdaOperation<TKey>>(new LambdaResultComparer<TKey>(isDescending));
+            Reset();
             SetValue(this);
         }
 
         protected override void OnLambdaCollectionReset()
         {
-            Reset();
+            if (sort != null)
+                Reset();
         }
 
         protected override void OnLambdaCollectionItemsAdded(IEnumerable<LambdaOperation<TKey>> newItems, int startingIndex)
