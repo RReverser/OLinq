@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reactive.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -30,7 +29,7 @@ namespace OLinq.Tests
         {
             // wait for max
             int max = value.Value;
-            value.Subscribe(i => max = i);
+            value.ValueChanged += (sender, args) => max = (int)args.NewValue;
 
             source.Add(1);
             Assert.AreEqual(4, max);
@@ -41,7 +40,6 @@ namespace OLinq.Tests
             source.Add(5);
             Assert.AreEqual(11, max);
         }
-
     }
 
 }
