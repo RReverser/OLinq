@@ -20,14 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OLinq", "OLinq\OLinq.csproj", "{F5D3512E-2FE2-45CD-86D0-9BA5753CB26E}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OLinq-shared", "OLinq-shared\OLinq-shared.shproj", "{89230690-5036-47E6-BD9E-DCA13C515C8F}"
-EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		OLinq-shared\OLinq-shared.projitems*{022242e9-62f7-41ca-96f3-c033a175e6fc}*SharedItemsImports = 4
-		OLinq-shared\OLinq-shared.projitems*{89230690-5036-47e6-bd9e-dca13c515c8f}*SharedItemsImports = 13
-		OLinq-shared\OLinq-shared.projitems*{f5d3512e-2fe2-45cd-86d0-9ba5753cb26e}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
