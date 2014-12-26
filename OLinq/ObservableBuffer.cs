@@ -21,10 +21,11 @@ namespace OLinq
         {
 
             this.view = view;
-            Reset();
 
             // subscribe to notifications
             view.CollectionChanged += view_CollectionChanged;
+            // reset buffer items
+            Reset();
         }
 
         /// <summary>
@@ -41,50 +42,45 @@ namespace OLinq
 #endif
                 case NotifyCollectionChangedAction.Replace:
                 case NotifyCollectionChangedAction.Reset:
-                    {
-                        Reset();
-                        OnCollectionChanged(args);
-                        break;
-                    }
+
+                    Reset();
+                    OnCollectionChanged(args);
+                    break;
                 case NotifyCollectionChangedAction.Add:
+                    // add new items
+                    if (args.NewStartingIndex == -1)
                     {
-                        // add new items
-                        if (args.NewStartingIndex == -1)
-                        {
-                            args = new NotifyCollectionChangedEventArgs(args.Action, args.NewItems, Items.Count);
-                            foreach (TElement item in args.NewItems)
-                                Items.Add(item);
-                        }
-                        else
-                        {
-                            int index = args.NewStartingIndex;
-                            foreach (TElement item in args.NewItems)
-                                Items.Insert(index++, item);
-                        }
-                        OnCollectionChanged(args);
-                        break;
+                        args = new NotifyCollectionChangedEventArgs(args.Action, args.NewItems, Items.Count);
+                        foreach (TElement item in args.NewItems)
+                            Items.Add(item);
                     }
+                    else
+                    {
+                        int index = args.NewStartingIndex;
+                        foreach (TElement item in args.NewItems)
+                            Items.Insert(index++, item);
+                    }
+                    OnCollectionChanged(args);
+                    break;
                 case NotifyCollectionChangedAction.Remove:
+                    // remove old items
+                    if (args.OldStartingIndex == -1)
                     {
-                        // remove old items
-                        if (args.OldStartingIndex == -1)
-                        {
-                            foreach (TElement item in args.OldItems)
-                                Remove(item);
-                        }
-                        else
-                        {
-                            for (int index = 0; index < args.OldItems.Count; index++)
-                                Items.RemoveAt(args.OldStartingIndex);
-                            OnCollectionChanged(args);
-                        }
-                        break;
+                        foreach (TElement item in args.OldItems)
+                            Remove(item);
                     }
+                    else
+                    {
+                        for (int index = 0; index < args.OldItems.Count; index++)
+                            Items.RemoveAt(args.OldStartingIndex);
+                        OnCollectionChanged(args);
+                    }
+                    break;
             }
         }
 
         /// <summary>
-        /// Invoked to reset the collection.
+        /// Resets the buffered collection based on the underlying list.
         /// </summary>
         void Reset()
         {
