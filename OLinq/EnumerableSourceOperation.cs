@@ -45,9 +45,7 @@ namespace OLinq
         {
             switch (args.Action)
             {
-#if !SILVERLIGHT
                 case NotifyCollectionChangedAction.Move:
-#endif
                 case NotifyCollectionChangedAction.Reset:
                 case NotifyCollectionChangedAction.Replace:
                     OnSourceCollectionReset();

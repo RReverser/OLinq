@@ -110,9 +110,7 @@ namespace OLinq
         {
             switch (args.Action)
             {
-#if !SILVERLIGHT
                 case NotifyCollectionChangedAction.Move:
-#endif
                 case NotifyCollectionChangedAction.Replace:
                 case NotifyCollectionChangedAction.Reset:
                     Reset();
