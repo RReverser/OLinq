@@ -48,6 +48,33 @@ namespace OLinq
             NotifyCollectionChangedUtil.RaiseRemoveEvent<TSource>(RaiseCollectionChanged, oldItems.Select(i => Lambdas[i]));
         }
 
+        protected override void OnLambdaValueChanged(LambdaValueChangedEventArgs<TSource, TKey> args)
+        {
+            int oldIndex = 0, newIndex = 0;
+            LambdaOperation<TKey> operation = null;
+            foreach (var op in sort)
+            {
+                if (Comparer<TKey>.Default.Compare(op.Value, args.NewValue) == 0)
+                {
+                    sort.Remove(op);
+                    RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, Lambdas[op], oldIndex));
+                    sort.Add(op);
+                    operation = op;
+                    break;
+                }
+                oldIndex++;
+            }
+            foreach (var op in sort)
+            {
+                if (op == operation)
+                {
+                    RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, Lambdas[op], newIndex));
+                    break;
+                }
+                newIndex++;
+            }
+        }
+
         public IEnumerator<TSource> GetEnumerator()
         {
             return sort.Select(i => Lambdas[i]).GetEnumerator();

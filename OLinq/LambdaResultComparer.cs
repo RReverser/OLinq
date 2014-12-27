@@ -24,7 +24,8 @@ namespace OLinq
         public int Compare(LambdaOperation<TResult> x, LambdaOperation<TResult> y)
         {
             var result = comparer.Compare(x.Value, y.Value);
-            return isDescending ? -result : result;
+            result = isDescending ? -result : result;
+            return result <= 0 ? -1 : 1;
         }
 
     }
