@@ -25,7 +25,7 @@ namespace OLinq.Tests
         }
 
         [TestMethod]
-        public void NotYetImplemented_OrderWorks()
+        public void OrderWorks()
         {
             Assert.AreEqual("864", string.Join("", buffer));
         }
@@ -48,28 +48,28 @@ namespace OLinq.Tests
         }
 
         [TestMethod]
-        public void NotYetImplemented_InsertAtEndWorks()
+        public void InsertAtEndWorks()
         {
             source.Insert(3, "3");
             Assert.AreEqual("8643", string.Join("", buffer));
         }
 
         [TestMethod]
-        public void NotYetImplemented_RemoveAtStartWorks()
+        public void RemoveAtStartWorks()
         {
             source.RemoveAt(0);
             Assert.AreEqual("64", string.Join("", buffer));
         }
 
         [TestMethod]
-        public void NotYetImplemented_RemoveInMiddleWorks()
+        public void RemoveInMiddleWorks()
         {
             source.RemoveAt(1);
             Assert.AreEqual("84", string.Join("", buffer));
         }
 
         [TestMethod]
-        public void NotYetImplemented_RemoveAtEndWorks()
+        public void RemoveAtEndWorks()
         {
             source.RemoveAt(2);
             Assert.AreEqual("86", string.Join("", buffer));

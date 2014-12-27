@@ -20,7 +20,7 @@ namespace OLinq.Tests
         }
 
         [TestMethod]
-        public void NotYetImplemented_OrderWorks()
+        public void OrderWorks()
         {
             DoAssert();
         }
@@ -62,21 +62,21 @@ namespace OLinq.Tests
             DoAssert();
         }
         [TestMethod]
-        public void NotYetImplemented_RemoveAtStartWorks()
+        public void RemoveAtStartWorks()
         {
             source.RemoveAt(0);
             DoAssert();
         }
 
         [TestMethod]
-        public void NotYetImplemented_RemoveInMiddleWorks()
+        public void RemoveInMiddleWorks()
         {
             source.RemoveAt(1);
             DoAssert();
         }
 
         [TestMethod]
-        public void NotYetImplemented_RemoveAtEndWorks()
+        public void RemoveAtEndWorks()
         {
             source.RemoveAt(2);
             DoAssert();

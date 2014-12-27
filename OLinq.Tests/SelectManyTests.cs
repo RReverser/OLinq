@@ -80,7 +80,7 @@ namespace OLinq.Tests
         
         
         [TestMethod]
-        public void NotYetImplemented_SelectManyWorks()
+        public void SelectManyWorks()
         {
             DoAssert();
         }
@@ -93,7 +93,7 @@ namespace OLinq.Tests
         }
 
         [TestMethod]
-        public void NotYetImplemented_CanRemoveFromSourceCollection()
+        public void CanRemoveFromSourceCollection()
         {
             source.RemoveAt(1);
             DoAssert();
@@ -116,7 +116,7 @@ namespace OLinq.Tests
         }
 
         [TestMethod]
-        public void NotYetImplemented_DoesntRemoveDuplicatesOnRemove()
+        public void DoesntRemoveDuplicatesOnRemove()
         {
             source[0].Add("1");
             source[0].RemoveAt(0);
