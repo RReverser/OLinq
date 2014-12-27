@@ -91,13 +91,11 @@
     <Compile Include="PropertyChangingEventArgs.cs" />
     <Compile Include="PropertyChangingEventHandler.cs" />
     <Compile Include="QuoteOperation.cs" />
-    <Compile Include="RBTree.cs" />
     <Compile Include="SelectManyOperation.cs" />
     <Compile Include="SelectOperation.cs" />
     <Compile Include="SingleOperation.cs" />
     <Compile Include="SingleOrDefaultOperation.cs" />
     <Compile Include="SkipOperation.cs" />
-    <Compile Include="SortedSet.cs" />
     <Compile Include="SumOperation.cs" />
     <Compile Include="TakeOperation.cs" />
     <Compile Include="TypeExtensions.cs" />
